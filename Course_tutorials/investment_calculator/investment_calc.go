@@ -6,10 +6,9 @@ import (
 )
 
 func main() {
-	var principalAmount float64 = 10000
-	var interestRate = 12.8
-	// years := 10
-	var years float64 = 10;
+	var principalAmount, years float64 = 10000, 10
+	interestRate := 12.8
+	// principalAmount, years, interestRate := 10000.0, 10.0, 12.8         Alternate Notiation for variable declaration
 
 	var finalAmount = principalAmount * math.Pow(1+(interestRate/100), years)
 
