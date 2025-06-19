@@ -24,6 +24,4 @@ func main () {
 
 	ratio := EarningsAfterTax / income * 100
 	fmt.Printf("Your profit after tax as a percentage of your total income: %.2f%%\n", ratio)
-	fmt.Printf("you have earned this much amount this month, and this is your profit")
-
 }
