@@ -8,7 +8,7 @@ import (
 var initialAmt float64 = 10000
 
 func writeToFile(balance float64) {
-	balanceStr := fmt.Sprintf("Remaining balance in account is: %.3f", balance)
+	balanceStr := fmt.Sprintf("%.3f", balance)
 	os.WriteFile("balance.txt", []byte(balanceStr), 0644)
 }
 
