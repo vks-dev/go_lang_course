@@ -7,30 +7,32 @@ var initialAmt float64 = 10000
 func main() {
 
 	fmt.Println("Welcome to World Bank")
-	fmt.Println("What would you like to do?")
-	fmt.Println("1. Check Balance")
-	fmt.Println("2. Deposit Money")
-	fmt.Println("3. Withdraw Money")
-	fmt.Println("4. Exit")
+	for {
+		fmt.Println("What would you like to do?")
+		fmt.Println("1. Check Balance")
+		fmt.Println("2. Deposit Money")
+		fmt.Println("3. Withdraw Money")
+		fmt.Println("4. Exit")
 
-	var choice int
-	fmt.Print("Enter your choice: ")
-	fmt.Scan(&choice)
+		var choice int
+		fmt.Print("Enter your choice: ")
+		fmt.Scan(&choice)
 
-	switch choice {
-	case 1:
-		balanceCheck()
-	case 2:
-		addMoney()
-	case 3:
-		withdrawMoney()
-	case 4:
-		return
+		switch choice {
+		case 1:
+			balanceCheck()
+		case 2:
+			addMoney()
+		case 3:
+			withdrawMoney()
+		case 4:
+			fmt.Print("Thank you for choosing our bank. Have a great day!")
+			return
 
-	default:
-		fmt.Printf("Your choice: %v is invalid, please try again.\n", choice)
+		default:
+			fmt.Printf("Your choice: %v is invalid, please try again.\n", choice)
+		}
 	}
-
 }
 
 func balanceCheck() {
