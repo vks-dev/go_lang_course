@@ -1,8 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 var initialAmt float64 = 10000
+
+func writeToFile(balance float64) {
+	balanceStr := fmt.Sprintf("Remaining balance in account is: %.3f", balance)
+	os.WriteFile("balance.txt", []byte(balanceStr), 0644)
+}
 
 func main() {
 
@@ -32,6 +40,7 @@ func main() {
 		default:
 			fmt.Printf("Your choice: %v is invalid, please try again.\n", choice)
 		}
+		writeToFile(initialAmt)
 	}
 }
 
