@@ -7,19 +7,25 @@ import (
 	"strconv"
 )
 
-var accountFile = "balance.txt"
+var accountFile string
+var tries int64 = 0
 
 func getBalance() (float64, error) {
 	dataInByte, err := os.ReadFile(accountFile)
-	if err == nil {
-		balanceInStr := string(dataInByte)
-		balance, err := strconv.ParseFloat(balanceInStr, 64)
-		if err == nil {
-			return balance, nil
+	if err != nil {
+		if tries == 0 {
+			return 0.0, errors.New("it seems we don't have an account under this name, So you'll be starting with 0.0 balance")
+		} else {
+			return 0.0, errors.New("unable to find account balance, starting with 0.0 balance")
 		}
+	}
+
+	balanceInStr := string(dataInByte)
+	balance, err := strconv.ParseFloat(balanceInStr, 64)
+	if err != nil {
 		return 0.0, errors.New("failed to parse data from file")
 	}
-	return 0.0, errors.New("unable to find account balance, starting with 0.0 balance")
+	return balance, nil
 }
 
 func writeToFile(balance float64) {
@@ -31,7 +37,7 @@ func main() {
 
 	var userName string
 
-	fmt.Println("Enter your Name: ")
+	fmt.Print("Enter your Name: ")
 	fmt.Scan(&userName)
 
 	accountFile = userName + ".txt"
@@ -42,6 +48,7 @@ func main() {
 		fmt.Printf("Error retrieving initial balance: %v\n", err)
 		fmt.Println("--------------------------------------------")
 	}
+	tries++
 
 	fmt.Println("Welcome to World Bank")
 	for {
