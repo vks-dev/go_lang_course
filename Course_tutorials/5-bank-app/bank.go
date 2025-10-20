@@ -1,18 +1,47 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"strconv"
 )
 
-var initialAmt float64 = 10000
+var accountFile = "balance.txt"
+
+func getBalance() (float64, error) {
+	dataInByte, err := os.ReadFile(accountFile)
+	if err == nil {
+		balanceInStr := string(dataInByte)
+		balance, err := strconv.ParseFloat(balanceInStr, 64)
+		if err == nil {
+			return balance, nil
+		}
+		return 0.0, errors.New("failed to parse data from file")
+	}
+	return 0.0, errors.New("unable to find account balance, starting with 0.0 balance")
+}
 
 func writeToFile(balance float64) {
 	balanceStr := fmt.Sprintf("%.3f", balance)
-	os.WriteFile("balance.txt", []byte(balanceStr), 0644)
+	os.WriteFile(accountFile, []byte(balanceStr), 0644)
 }
 
 func main() {
+
+	var userName string
+
+	fmt.Println("Enter your Name: ")
+	fmt.Scan(&userName)
+
+	accountFile = userName + ".txt"
+
+	initialAmt, err := getBalance()
+
+	if err != nil {
+		fmt.Printf("Error retrieving initial balance: %v\n", err)
+		fmt.Println("--------------------------------------------")
+	}
 
 	fmt.Println("Welcome to World Bank")
 	for {
@@ -28,11 +57,11 @@ func main() {
 
 		switch choice {
 		case 1:
-			balanceCheck()
+			balanceCheck(initialAmt)
 		case 2:
-			addMoney()
+			addMoney(initialAmt)
 		case 3:
-			withdrawMoney()
+			withdrawMoney(initialAmt)
 		case 4:
 			fmt.Print("Thank you for choosing our bank. Have a great day!")
 			return
@@ -44,11 +73,11 @@ func main() {
 	}
 }
 
-func balanceCheck() {
+func balanceCheck(initialAmt float64) {
 	fmt.Printf("Your account has %v/- available for use.\n", initialAmt)
 }
 
-func addMoney() {
+func addMoney(initialAmt float64) {
 	var deposit float64
 	fmt.Print("How much would you like to deposit? ")
 	fmt.Scan(&deposit)
@@ -62,10 +91,15 @@ func addMoney() {
 	fmt.Printf("You've successfully deposited %v/- into your account. Total Balance is: %v/- \n", deposit, initialAmt)
 }
 
-func withdrawMoney() {
+func withdrawMoney(initialAmt float64) {
 	var withdrawAmt float64
 	fmt.Print("How much would you like to withdraw? ")
 	fmt.Scan(&withdrawAmt)
+
+	if initialAmt <= 0 {
+		fmt.Println("Your account has insufficient balance to withdraw money. Please try again after depositing money.")
+		return
+	}
 
 	if withdrawAmt <= 0 {
 		fmt.Println("You're withdrawing an invalid amount. Withdraw amount must be greater than 0. Please try again")
